@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="x-ua-compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ competition.name }}</title>
+  <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.css">
+  <link rel="stylesheet" href="/static/css/dataKingdom.css">
+</head>
+<body class="info-about-page">
+<nav class="navbar navbar-default page-nav" role="navigation">
+  <a href="{% url 'index' %}"><ul class="nav navbar-nav nav-pills navbar-brand"><span class="brand">Data</span> Kingdom</ul></a>
+
+  {% if not request.user.is_authenticated %}
+  <ul class="nav navbar-nav nav-pills pull-right">
+    <li><a href="{% url 'index' %}">主页</a></li>
+    <li><a href="{% url 'all_competitions' %}">全部竞赛</a></li>
+    <li><a href="{% url 'login' %}?next={{ request.path }}">登录</a></li>
+    <li><a href="{% url 'register' %}">注册</a></li>
+  </ul>
+  {% else %}
+    <ul class="nav navbar-nav nav-pills pull-right">
+    <li><a href="{% url 'index' %}">主页</a></li>
+    <li><a href="{% url 'all_competitions' %}">全部竞赛</a></li>
+    <li><a href="{% url 'user:info' %}"><span class="glyphicon glyphicon-user"></span> {{ request.user.username }}</a></li>
+    <li><a href="{% url 'logout' %}">注销</a></li>
+    </ul>
+  {% endif %}
+</nav>
+
+<div class="container-fluid all-page-header">
+  <div class="row">
+    <div class="col-md-2 pull-right" style="padding-right: 0">
+      <img src="/static/img/colorful-info-img.png">
+    </div>
+    <div class="col-md-6 col-md-offset-1 page-header-txt">
+      <h1>{{ competition.name }}</h1>
+      <br>
+      <br>
+      <a>
+        {% if is_attended %}
+          <button id="join" type="button" class="btn btn-default joined" disabled>已参赛</button>
+        {% else %}
+          <button id="join" type="button" class="btn btn-default">报名参赛</button>
+        {% endif %}
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid content">
+  <div class="row">
+    <div class="col-md-3 col-md-offset-1 verticle-list">
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="#info-intro">赛事介绍</a></li>
+        <li><a href="#info-rules">比赛规则</a></li>
+        <li><a href="#info-data">比赛数据</a></li>
+        <li><a href="#info-FAQ">FAQ</a></li>
+      </ul>
+    </div>
+
+    <div class="col-md-7 col-md-offset-4">
+      <div class="pre-line content-txt">
+        {% autoescape off %}
+        {{ competition.detail }}
+        {% endautoescape %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="to-top img-circle hidden-xs">
+  <span class="glyphicon glyphicon-upload"></span>
+</div>
+
+<div class="confirm">
+    <div class="winBg"></div>
+    <div class="container win">
+        <div class="col-md-4 col-md-offset-4 panel panel-default win-panel text-center">
+            <h2>你确定要参加比赛吗？</h2>
+            <p>--------这里是小提示--------</p>
+            <form method="post" action="{% url 'attend_competition' competition.id %}">
+                <button id="OK" type="submit" class="btn btn-primary btn-lg">确定</button>
+                <button id="cancel" type="button" class="btn btn-primary btn-lg">取消</button>
+                {% csrf_token %}
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer>
+  <div class="container text-center">
+    <br>
+    <h2>Data Kingdom</h2>
+    <br>
+    <br>
+    <div class="row">
+      <div class="col-md-2 col-md-offset-5">
+        <img class="QRcode" src="/static/img/QRcode.png">
+      </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <ul class="list-inline">
+      <li><a href="{% url 'info' %}#info-about">关于数据王国</a></li>
+      <li><a href="{% url 'info' %}#info-privacy">隐私协议</a></li>
+      <li><a href="{% url 'info' %}#info-rules">服务规则</a></li>
+      <li><a href="{% url 'info' %}#info-contact">联系我们</a></li>
+    </ul>
+  </div>
+  <img class="footer-bg" src="/static/img/colorful-bottom.png">
+</footer>
+<script src="/static/jQuery/jquery-3.2.1.min.js"></script>
+<script src="/static/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+<script src="/static/js/competition.js"></script>
+<script>
+    var listDiv = document.getElementsByClassName("verticle-list")[0];
+    var icon = document.getElementsByClassName("to-top")[0];
+
+    document.body.onscroll = function () {
+        if (document.body.scrollTop !== 0)
+            icon.style.display = "block";
+        else
+            icon.style.display = "none";
+
+
+        if (document.body.scrollTop >= 400) {
+            listDiv.style.position = "fixed";
+            listDiv.style.top = "21px";
+        } else {
+            listDiv.style.position = "absolute"
+            listDiv.style.top = "";
+        }
+
+    }
+
+    icon.onclick = function () {
+        document.body.scrollTop = 0;
+    }
+</script>
+</body>
+</html>

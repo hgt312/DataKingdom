@@ -1,0 +1,86 @@
+{% extends 'user-base.html' %}
+
+{% block title %}{{ request.user.username }}-个人信息{% endblock %}
+
+{% block content %}
+<div class="container-fluid content">
+  <div class="row">
+    <div class="col-md-2 col-md-offset-2 verticle-list">
+      <ul class="nav nav-pills nav-stacked">
+        <li class="active"><a href="{% url 'user:info' %}">个人信息</a></li>
+        <li><a href="{% url 'user:set_email' %}">修改邮箱</a></li>
+        <li><a href="{% url 'user:set_password' %}">修改密码</a></li>
+        <li><a href="{% url 'user:attend' %}">参加比赛</a></li>
+      </ul>
+    </div>
+
+    <div class="col-md-6 col-md-offset-4">
+      <div class="content-txt">
+        <h2>个人信息</h2>
+        <hr>
+        <form method="post" action="{% url 'user:info' %}">
+          <label>用户名:</label>
+          <div class="input-group input-group-lg">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+            <input type="text" class="form-control" value="{{ request.user.username }}" disabled>
+          </div>
+
+          <label>邮箱:</label>
+          <div class="input-group input-group-lg">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+            <input type="text" class="form-control" value="{{ request.user.email }}" disabled>
+          </div>
+
+          <label>性别:</label>
+          <div class="gender-select">
+            <label class="radio-inline"><input type="radio" name="gender" value="male" {% if request.user.gender == 'male' %}checked="checked"{% endif %}>男</label>
+            <label class="radio-inline"><input type="radio" name="gender" value="female" {% if request.user.gender == 'female' %}checked="checked"{% endif %}>女</label>
+          </div>
+
+          <label>城市:</label>
+          <div class="input-group input-group-lg">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-home"></span></span>
+            <input type="text" class="form-control" name="city" value="{{ request.user.city | default_if_none:''}}">
+          </div>
+
+          <label>身份证号:</label>
+          <div class="input-group input-group-lg">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-credit-card"></span></span>
+            <input type="text" class="form-control" name="identity" value="{{ request.user.identity | default_if_none:''}}">
+          </div>
+
+          <label>手机号码:</label>
+          <div class="input-group input-group-lg">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-phone"></span></span>
+            <input type="text" class="form-control" name="mobile" value="{{ request.user.mobile | default_if_none:''}}">
+          </div>
+
+          <label>学校（组织）:</label>
+          <div class="input-group input-group-lg">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-education"></span></span>
+            <input type="text" class="form-control" name="organization" value="{{ request.user.organization | default_if_none:''}}">
+          </div>
+
+          <label>入学年份:</label>
+          <div class="input-group input-group-lg">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+            <input type="text" class="form-control" name="year" value="{{ request.user.year | default_if_none:''}}">
+          </div>
+
+          <label>专业（工作）:</label>
+          <div class="input-group input-group-lg">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-briefcase"></span></span>
+            <input type="text" class="form-control" name="work" value="{{ request.user.work | default_if_none:''}}">
+          </div>
+
+          <label>个人介绍:</label>
+          <textarea class="form-control" rows="4" name="introduction" placeholder="关于你。。。">{{ request.user.introduction | default_if_none:''}}</textarea>
+
+          <button type="submit" class="btn btn-primary btn-lg">修改</button>
+        {% csrf_token %}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

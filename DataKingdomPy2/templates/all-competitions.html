@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>全部竞赛</title>
+  <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.css">
+  <link rel="stylesheet" href="/static/css/dataKingdom.css">
+</head>
+<body class="cpt-page">
+<nav class="navbar navbar-default page-nav" role="navigation">
+  <a href="{% url 'index' %}"><ul class="nav navbar-nav nav-pills navbar-brand"><span class="brand">Data</span> Kingdom</ul></a>
+
+  {% if not request.user.is_authenticated %}
+  <ul class="nav navbar-nav nav-pills pull-right">
+    <li><a href="{% url 'index' %}">主页</a></li>
+    <li><a href="{% url 'all_competitions' %}">全部竞赛</a></li>
+    <li><a href="{% url 'login' %}?next={{ request.path }}">登录</a></li>
+    <li><a href="{% url 'register' %}">注册</a></li>
+  </ul>
+  {% else %}
+    <ul class="nav navbar-nav nav-pills pull-right">
+    <li><a href="{% url 'index' %}">主页</a></li>
+    <li><a href="{% url 'all_competitions' %}">全部竞赛</a></li>
+    <li><a href="{% url 'user:info' %}"><span class="glyphicon glyphicon-user"></span> {{ request.user.username }}</a></li>
+    <li><a href="{% url 'logout' %}">注销</a></li>
+    </ul>
+  {% endif %}
+
+</nav>
+
+<div class="container-fluid all-page-header">
+  <div class="row">
+    <div class="col-md-4 col-md-offset-1 page-header-txt">
+      <h1>竞赛列表</h1>
+      <br>
+      <div class="input-group">
+        <input type="text" id="search" class="form-control" placeholder="搜索">
+        <span id="search-btn" class="input-group-addon"><a><span class="glyphicon glyphicon-search"></span></a></span>
+      </div>
+    </div>
+    <div class="col-md-4 pull-right">
+      <img src="/static/img/colorful-cpt-img.png">
+    </div>
+  </div>
+</div>
+
+<div class="container competitions">
+  {% for competition in all_competitions %}
+  <div class="row competition-card">
+    <div class="col-md-12">
+      <div class="panel panel-default">
+        <div class="row">
+          <div class="col-md-4 pull-left">
+            <img src="{{ MEDIA_URL }}{{ competition.image }}">
+          </div>
+          <div class="col-md-7 cpt-txt">
+            <h2>{{ competition.name }}</h2>
+            <br>
+            <p>{{ competition.simple_intro }}</p>
+            <div class="foot row">
+              <div class="col-md-10 pull-left">
+                <p>报名时间：{{ competition.enroll_date }}~{{ competition.deadline }}</p>
+              </div>
+              <div class="col-md-2 pull-right">
+                <a href="{% url 'competition' competition.id %}"><button type="button" class="btn btn-cpt">参加比赛</button></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+
+</div>
+
+<div class="to-top img-circle hidden-xs">
+  <span class="glyphicon glyphicon-upload"></span>
+</div>
+
+<footer>
+  <div class="container text-center">
+    <br>
+    <h2>Data Kingdom</h2>
+    <br>
+    <br>
+    <div class="row">
+      <div class="col-md-2 col-md-offset-5">
+        <img class="QRcode" src="/static/img/QRcode.png">
+      </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <ul class="list-inline">
+      <li><a href="{% url 'info' %}#info-about">关于数据王国</a></li>
+      <li><a href="{% url 'info' %}#info-privacy">隐私协议</a></li>
+      <li><a href="{% url 'info' %}#info-rules">服务规则</a></li>
+      <li><a href="{% url 'info' %}#info-contact">联系我们</a></li>
+    </ul>
+  </div>
+  <img class="footer-bg" src="/static/img/colorful-bottom.png">
+</footer>
+
+<script src="/static/jQuery/jquery-3.2.1.min.js"></script>
+<script src="/static/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+<script src="/static/js/all-competitions.js"></script>
+<script src="/static/js/all-page.js"></script>
+</body>
+</html>

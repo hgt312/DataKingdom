@@ -1,0 +1,102 @@
+{% extends 'user-base.html' %}
+
+{% block title %}{{ request.user.username }}-个人参赛{% endblock %}
+
+{% block header %}
+    <body class="profile-page profile-page-cpt">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid content">
+  <div class="row">
+    <div class="col-md-2 col-md-offset-2 verticle-list">
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="{% url 'user:info' %}">个人信息</a></li>
+        <li><a href="{% url 'user:set_email' %}">修改邮箱</a></li>
+        <li><a href="{% url 'user:set_password' %}">修改密码</a></li>
+        <li class="active"><a href="{% url 'user:attend' %}">参加比赛</a></li>
+      </ul>
+    </div>
+
+    <div class="col-md-6 col-md-offset-4">
+      {% if number > 0 %}
+      <div class="container-fluid competitions">
+        {% for competition in uploaded_competitions%}
+        <div class="row competition-card">
+          <div class="col-md-12">
+            <div class="panel panel-default">
+              <div class="row">
+                <div class="col-md-5 pull-left">
+                  <img src="{{ MEDIA_URL }}{{ competition.competition.image }}">
+                </div>
+                <div class="col-md-7 cpt-txt">
+                  <h2 onclick="window.location = {% url 'competition' competition.competition.id %}">{{ competition.competition.name }}</h2>
+                  <div class="foot row">
+                    <div class="col-md-2">
+                      <a href="{% url 'user:download' competition.competition.id %}" target="_blank">
+                        <button type="button" class="btn btn-cpt">下载试题</button>
+                      </a>
+                    </div>
+                    <div class="col-md-2 col-md-offset-1">
+                        <form class="cpt-form" method="post" enctype="multipart/form-data" action="{% url 'user:upload' %}">
+                            <button type="submit" class="btn btn-cpt">修改数据</button>
+                            <input type="file" name="file">
+                            <input type="hidden" name="competition_id" value="{{ competition.competition.id }}">
+                          {% csrf_token %}
+                        </form>
+                    </div>
+                    <div>
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% for competition in other_competitions%}
+        <div class="row competition-card">
+          <div class="col-md-12">
+            <div class="panel panel-default">
+              <div class="row">
+                <div class="col-md-5 pull-left">
+                  <img src="{{ MEDIA_URL }}{{ competition.competition.image }}">
+                </div>
+                <div class="col-md-7 cpt-txt">
+                  <h2 onclick="window.location = '{% url 'competition' competition.competition.id %}'">{{ competition.competition.name }}</h2>
+                  <div class="foot row">
+                    <div class="col-md-2">
+                      <a href="{% url 'user:download' competition.competition.id %}" target="_blank">
+                        <button type="button" class="btn btn-cpt">下载试题</button>
+                      </a>
+                    </div>
+                    <div class="col-md-4 col-md-offset-1">
+                        <form class="cpt-form" method="post" enctype="multipart/form-data" action="{% url 'user:upload' %}">
+                            <button type="submit" class="btn btn-cpt">上传数据</button>
+                            <input id="test" type="file" name="file">
+                            <input type="hidden" name="competition_id" value="{{ competition.competition.id }}">
+                          {% csrf_token %}
+                        </form>
+                    </div>
+                    <p id="filePath"></p>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+      {% else %}
+      <div class="content-txt">
+        <h2>暂未参加任何比赛</h2>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>注册</title>
+  <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.css">
+  <link rel="stylesheet" href="/static/css/dataKingdom.css">
+</head>
+<body class="login-register-page">
+<img class="index-bg" src="/static/img/Colorful-Paint.png">
+<div class="container">
+  <div class="row text-center">
+    <a href="{% url 'index' %}"><h1>Data Kingdom</h1></a>
+    <div class="panel panel-default col-md-6 col-md-offset-3 text-center">
+      <h2>注册</h2>
+      <form class="register-form text-left" method="post" action="{% url 'register' %}">
+        <label>用户名:</label>
+        <div class="input-group input-group-lg">
+          <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+          <input type="text" class="form-control" name="username" value="{{ register_form.username.value | default_if_none:'' }}">
+        </div>
+
+        {% if register_form.username.errors %}
+        <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          {{ register_form.username.errors }}
+        </div>
+        {% endif %}
+
+        <label>邮箱:</label>
+        <div class="input-group input-group-lg">
+          <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+          <input type="email" class="form-control" name="email" value="{{ register_form.email.value | default_if_none:'' }}">
+        </div>
+
+        {% if register_form.email.errors %}
+        <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          {{ register_form.email.errors }}
+        </div>
+        {% endif %}
+
+        <label>密码:</label>
+        <div class="input-group input-group-lg">
+          <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+          <input type="password" class="form-control" name="password_1" value="{{ register_form.password_1.value | default_if_none:'' }}">
+        </div>
+
+        {% if register_form.password_1.errors %}
+        <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          {{ register_form.password_1.errors }}
+        </div>
+        {% endif %}
+
+        <label>确认密码:</label>
+        <div class="input-group input-group-lg">
+          <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+          <input type="password" class="form-control" name="password_2" value="{{ register_form.password_2.value | default_if_none:'' }}">
+        </div>
+
+        {% if msg == '两次输入密码不相同' %}
+        <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <ul><li>两次输入密码不相同</li></ul>
+        </div>
+        {% endif %}
+
+        {% if msg == '用户名或邮箱已被注册' %}
+        <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <ul><li>用户名或邮箱已被注册</li></ul>
+        </div>
+        {% endif %}
+
+        <label>验证码:</label>
+        <div class="row">
+        {{ register_form.captcha }}
+        </div>
+
+        {% if register_form.captcha.errors %}
+        <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          {{ register_form.captcha.errors }}
+        </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary btn-lg">注册</button>
+      {% csrf_token %}
+      </form>
+    </div>
+  </div>
+</div>
+<script src="/static/jQuery/jquery-3.2.1.min.js"></script>
+<script src="/static/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+<script>
+    $('.captcha').click(function(){
+        console.log('click');
+        $.getJSON("/captcha/refresh/", function(result){
+            $('.captcha').attr('src', result['image_url']);
+            $('#id_captcha_0').val(result['key'])
+        });
+    });
+
+    $('#ver-code-img').css("height",$('#ver-code-input').height());
+</script>
+</body>
+</html>

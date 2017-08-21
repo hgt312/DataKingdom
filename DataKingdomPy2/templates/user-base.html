@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, intial-scale=1">
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.css">
+  <link rel="stylesheet" href="/static/css/dataKingdom.css">
+</head>
+{% block header %}<body class="profile-page profile-page-info">{% endblock %}
+<nav class="navbar navbar-default page-nav" role="navigation">
+  <a href="{% url 'index' %}"><ul class="nav navbar-nav nav-pills navbar-brand"><span class="brand">Data</span> Kingdom</ul></a>
+  <ul class="nav navbar-nav nav-pills pull-right">
+  <li><a href="{% url 'index' %}">主页</a></li>
+  <li><a href="{% url 'all_competitions' %}">全部竞赛</a></li>
+  <li><a href="{% url 'user:info' %}"><span class="glyphicon glyphicon-user"></span> {{ request.user.username }}</a></li>
+  <li><a href="{% url 'logout' %}">注销</a></li>
+  </ul>
+
+</nav>
+
+{% block content %}
+
+{% endblock %}
+
+<div class="to-top img-circle hidden-xs">
+  <span class="glyphicon glyphicon-upload"></span>
+</div>
+
+<footer>
+  <div class="container text-center">
+    <br>
+    <h2>Data Kingdom</h2>
+    <br>
+    <br>
+    <div class="row">
+      <div class="col-md-2 col-md-offset-5">
+        <img class="QRcode" src="/static/img/QRcode.png">
+      </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <ul class="list-inline">
+      <li><a href="{% url 'info' %}#info-about">关于数据王国</a></li>
+      <li><a href="{% url 'info' %}#info-privacy">隐私协议</a></li>
+      <li><a href="{% url 'info' %}#info-rules">服务规则</a></li>
+      <li><a href="{% url 'info' %}#info-contact">联系我们</a></li>
+    </ul>
+  </div>
+  <img class="footer-bg" src="/static/img/colorful-bottom.png">
+</footer>
+
+<script src="/static/jQuery/jquery-3.2.1.min.js"></script>
+<script src="/static/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+<script src="/static/js/all-page.js"></script>
+</body>
+</html>

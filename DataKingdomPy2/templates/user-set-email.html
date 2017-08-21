@@ -1,0 +1,55 @@
+{% extends 'user-base.html' %}
+
+{% block title %}{{ request.user.username }}-账号设置{% endblock %}
+
+{% block content %}
+<div class="container-fluid content">
+  <div class="row">
+    <div class="col-md-2 col-md-offset-2 verticle-list">
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="{% url 'user:info' %}">个人信息</a></li>
+        <li class="active"><a href="{% url 'user:set_email' %}">修改邮箱</a></li>
+        <li><a href="{% url 'user:set_password' %}">修改密码</a></li>
+        <li><a href="{% url 'user:attend' %}">参加比赛</a></li>
+      </ul>
+    </div>
+
+    <div class="col-md-6 col-md-offset-4">
+      <div class="content-txt">
+        <h2>修改密码</h2>
+        <hr>
+        <form method="post" action="{% url 'user:set_email' %}">
+          <label>请输入密码:</label>
+          <div class="input-group input-group-lg">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+            <input type="password" class="form-control" name="password">
+          </div>
+
+          {% if msg == "密码错误" %}
+          <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <ul><li>密码错误</li></ul>
+          </div>
+          {% endif %}
+
+          <label>新邮箱地址:</label>
+          <div class="input-group input-group-lg">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+            <input type="email" class="form-control" name="email">
+          </div>
+
+          {% if update_email_form.email.errors %}
+          <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ update_email_form.email.errors }}
+          </div>
+          {% endif %}
+
+          <button type="submit" class="btn btn-primary btn-lg">提交</button>
+        {% csrf_token %}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
